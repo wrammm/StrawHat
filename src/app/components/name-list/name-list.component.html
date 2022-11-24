@@ -1,0 +1,72 @@
+<mat-card style="margin: 16px">
+    <div>
+        <mat-form-field *ngFor="let name of names; index as i; trackBy:trackByFn" style="margin: 8px">
+            <mat-label>Name</mat-label>
+            <input matInput [(ngModel)]="names[i]" (ngModelChange)="updateOptions()" type="text">
+            <button *ngIf="names.length > 1" matSuffix mat-icon-button aria-label="Clear" (click)="removeName(i)">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-form-field>
+    </div>
+    <div>
+        <button *ngIf="value" mat-button (click)="addInitName()">
+            Add name
+        </button>
+    </div>
+</mat-card>
+
+<!-- <div class="optionsCont">
+    <div>
+        <button mat-raised-button color="primary">
+            Split into teams
+        </button>
+    </div>
+    <div>
+        <button mat-raised-button color="primary">
+            Split into teams
+        </button>
+    </div>
+    <div>
+        <button mat-raised-button color="primary">
+            Assign numbers
+        </button>
+    </div>
+</div> -->
+
+<mat-card style="margin: 16px">
+    <mat-form-field appearance="fill" floatLabel="always">
+        <mat-label>Number of teams</mat-label>
+        <input matInput type="number" class="example-right-align" [(ngModel)]="numberOfTeams">
+        <div matSuffix class="wrapper-indicator">
+          <button class="up" mat-icon-button (click)="numberOfTeams = numberOfTeams + 1">
+            <mat-icon>expand_less</mat-icon>
+          </button>
+          <button class="down" mat-icon-button (click)="numberOfTeams = numberOfTeams - 1">
+            <mat-icon>expand_more</mat-icon>
+          </button>
+        </div>
+      </mat-form-field>
+      <!-- <mat-form-field appearance="fill" floatLabel="always">
+        <mat-label>Number per team</mat-label>
+        <input matInput type="number" class="example-right-align" [(ngModel)]="numberPerTeam">
+        <div matSuffix class="wrapper-indicator">
+          <button class="up" mat-icon-button (click)="numberPerTeam = numberPerTeam + 1">
+            <mat-icon>expand_less</mat-icon>
+          </button>
+          <button class="down" mat-icon-button (click)="numberPerTeam = numberPerTeam - 1">
+            <mat-icon>expand_more</mat-icon>
+          </button>
+        </div>
+      </mat-form-field> -->
+    <mat-tab-group>
+        <mat-tab label="Split into teams">
+            <mat-grid-list cols="2" rowHeight="2:1">
+                <mat-grid-tile *ngFor="let tilesPersonCount of tilesPersonCounts; index as i; trackBy:trackByFn">
+                    <i *ngFor="let _ of [].constructor(tilesPersonCount)" class="material-icons">person</i>
+                </mat-grid-tile>
+                
+              </mat-grid-list>
+        </mat-tab>
+        <mat-tab label="Draw straws"> Pick order </mat-tab>
+      </mat-tab-group>
+</mat-card>
