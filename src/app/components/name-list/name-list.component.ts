@@ -9,27 +9,27 @@ export class NameListComponent implements OnInit {
 
   constructor() { }
 
-  value = 'Clear me';
   tilesPersonCounts: number[] = [];
   numberOfTeams = 1;
-  numberPerTeam = 1;
+  numberOfPeople = 0;
 
   names: string[] = ['', '', '', ''];
 
-  teamSplitOptions: any = {
-    4: [
-      {
-        numPerTeam: 2,
-        remainder: 0
-      }
-    ],
-    5: [
-      {
-        numPerTeam: 2,
-        remainder: 0
-      }
-    ]
-  }
+  // numberPerTeam = 1;
+  // teamSplitOptions: any = {
+  //   4: [
+  //     {
+  //       numPerTeam: 2,
+  //       remainder: 0
+  //     }
+  //   ],
+  //   5: [
+  //     {
+  //       numPerTeam: 2,
+  //       remainder: 0
+  //     }
+  //   ]
+  // }
   ngOnInit(): void {
   }
 
@@ -57,14 +57,94 @@ export class NameListComponent implements OnInit {
     }
   }
 
+  changeNumberOfTeams(increment: boolean) {
+    let numberOfTeamsOriginal = this.numberOfTeams;
+    if(this.numberOfPeople === 0) {
+      return;
+    }
+    if(increment) {
+      this.numberOfTeams = (this.numberOfTeams < this.numberOfPeople) ? this.numberOfTeams + 1 : this.numberOfPeople;
+    } else {
+      this.numberOfTeams = (this.numberOfTeams > 1) ? this.numberOfTeams - 1 : 1;
+    }
+
+    if(numberOfTeamsOriginal !== this.numberOfTeams) {
+      this.updateNumberOfTeams();
+    }
+  }
+
+  updateNumberOfTeams() {
+    this.tilesPersonCounts = [];
+    console.log('updateNumberOfTeams: ', this.numberOfTeams); //2
+    console.log('this.numberOfPeople: ', this.numberOfPeople); //4
+
+    let numberOfPeople = this.numberOfPeople;
+    let numberOfTeams = this.numberOfTeams;
+
+    let divide = Math.floor(numberOfPeople / numberOfTeams);
+    let remainder = numberOfPeople % numberOfTeams;
+    console.log('divide: ', divide);
+    console.log('remainder: ', remainder);
+    for(let i = 0; i < numberOfTeams; i++) {
+      this.tilesPersonCounts.push(1);
+    }
+    // this.tilesPersonCounts.forEach(tilesPersonCount => {
+    //   tilesPersonCount = divide;
+    // });
+    for(let i = 0; i < this.tilesPersonCounts.length; i++) {
+      this.tilesPersonCounts[i] = divide;
+    }
+
+    for(let i = 0; i < remainder; i++) {
+      this.tilesPersonCounts[i] ++ ;
+    }
+    console.log('this.tilesPersonCounts: ', this.tilesPersonCounts);
+  }
+
   generateTeamsOptions(names: string[], length: number) {
     console.log('names: ', names);
     console.log('length: ', length);
     this.tilesPersonCounts = [];
-    this.numberOfTeams = length;
+    this.numberOfPeople = length;
     for(let i = 0; i< length; i++) {
       this.tilesPersonCounts.push(1);
     }
+  }
+
+  generateTeams() {
+    let generatedTeams: any = [];
+    let generatedTeam: any = [];
+    console.log('this.names: ', this.names);
+    let shuffledNames = this.shuffleNames(this.names.slice());
+    console.log('shuffle: ', shuffledNames);
+    let index = 0;
+    this.tilesPersonCounts.forEach(tilesPersonCount => {
+      for(let i = 0; i< tilesPersonCount; i++) {
+        generatedTeam.push(shuffledNames[index]);
+        index ++;
+      }
+      generatedTeams.push(generatedTeam);
+      generatedTeam = [];
+    });
+    console.log('generatedTeams: ', generatedTeams);
+  }
+
+  shuffleNames(array: string[]) {
+    let currentIndex = array.length,  randomIndex;
+  
+    // While there remain elements to shuffle.
+    while (currentIndex != 0) {
+  
+      // Pick a remaining element.
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+  
+      // And swap it with the current element.
+      [array[currentIndex], array[randomIndex]] = [
+        array[randomIndex], array[currentIndex]];
+    }
+  
+    return array;
   }
 
 }
