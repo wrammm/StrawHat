@@ -15,11 +15,13 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatChipsModule} from '@angular/material/chips';
 import {MaterialModule} from '../material.module';
 import {MatSliderModule} from '@angular/material/slider';
+import { TeamResultsDialogComponent } from './components/team-results-dialog/team-results-dialog.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    NameListComponent
+    NameListComponent,
+    TeamResultsDialogComponent
   ],
   imports: [
     BrowserAnimationsModule,

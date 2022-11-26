@@ -16,21 +16,22 @@
 </mat-card>
 
 <mat-card style="margin: 16px">
-  <mat-form-field appearance="fill" floatLabel="always">
-    <mat-label>Number of teams</mat-label>
-        <input matInput type="number" class="example-right-align" [(ngModel)]="numberOfTeams">
-        <div matSuffix class="wrapper-indicator">
-          <button class="up" mat-icon-button (click)="changeNumberOfTeams(true)">
-            <mat-icon>expand_less</mat-icon>
-          </button>
-          <button class="down" mat-icon-button (click)="changeNumberOfTeams(false)">
-            <mat-icon>expand_more</mat-icon>
-          </button>
-        </div>
-  </mat-form-field>
-
   <mat-tab-group>
     <mat-tab label="Split into teams">
+      <div style="margin-top:16px">
+        <mat-form-field appearance="fill" floatLabel="always" >
+          <mat-label>Number of teams</mat-label>
+              <input matInput type="number" class="example-right-align" [(ngModel)]="numberOfTeams">
+              <div matSuffix class="wrapper-indicator">
+                <button class="up" mat-icon-button (click)="changeNumberOfTeams(true)">
+                  <mat-icon>expand_less</mat-icon>
+                </button>
+                <button class="down" mat-icon-button (click)="changeNumberOfTeams(false)">
+                  <mat-icon>expand_more</mat-icon>
+                </button>
+              </div>
+        </mat-form-field>
+      </div>
       <mat-grid-list cols="2" rowHeight="100px">
         <mat-grid-tile *ngFor="let tilesPersonCount of tilesPersonCounts; index as i; trackBy:trackByFn">
           <div>

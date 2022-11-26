@@ -1,0 +1,18 @@
+<div>
+    <h2>Teams selection</h2>
+</div>
+<div style="position: fixed; right: 8px; top: 8px">
+    <button matSuffix mat-icon-button aria-label="Clear" mat-dialog-close>
+        <mat-icon>close</mat-icon>
+    </button>
+</div>
+<div *ngFor="let team of teams; index as i; trackBy:trackByFn">
+    <div>
+        <h3>Team {{i + 1}}</h3>
+    </div>
+    <div *ngFor="let teamMember of team; index as v; trackBy:trackByFn">
+        <span>
+            {{teamMember}}
+        </span>
+    </div>
+</div>

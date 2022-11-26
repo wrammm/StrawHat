@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { TeamResultsDialogComponent } from '../team-results-dialog/team-results-dialog.component';
 
 @Component({
   selector: 'app-name-list',
@@ -7,7 +9,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NameListComponent implements OnInit {
 
-  constructor() { }
+  constructor(public dialog: MatDialog) { }
 
   tilesPersonCounts: number[] = [];
   numberOfTeams = 1;
@@ -127,6 +129,23 @@ export class NameListComponent implements OnInit {
       generatedTeam = [];
     });
     console.log('generatedTeams: ', generatedTeams);
+    this.openResultsDialog(generatedTeams);
+  }
+
+  openResultsDialog(generatedTeams: any) {
+    const dialogRef = this.dialog.open(TeamResultsDialogComponent, {
+      data: {
+        generatedTeams: generatedTeams,
+      },
+      maxWidth: '100vw',
+      maxHeight: '100vh',
+      height: '100%',
+      width: '100%'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });
   }
 
   shuffleNames(array: string[]) {
