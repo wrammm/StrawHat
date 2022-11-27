@@ -16,6 +16,11 @@ import {MatChipsModule} from '@angular/material/chips';
 import {MaterialModule} from '../material.module';
 import {MatSliderModule} from '@angular/material/slider';
 import { TeamResultsDialogComponent } from './components/team-results-dialog/team-results-dialog.component';
+// import { NgChartsModule } from 'ng2-charts';
+import * as PlotlyJS from 'plotly.js-dist-min';
+import { PlotlyModule } from 'angular-plotly.js';
+
+PlotlyModule.plotlyjs = PlotlyJS;
 
 @NgModule({
   declarations: [
@@ -24,6 +29,7 @@ import { TeamResultsDialogComponent } from './components/team-results-dialog/tea
     TeamResultsDialogComponent
   ],
   imports: [
+    PlotlyModule,
     BrowserAnimationsModule,
     FormsModule,
     BrowserModule,
@@ -35,7 +41,8 @@ import { TeamResultsDialogComponent } from './components/team-results-dialog/tea
     MatFormFieldModule,
     MatButtonModule,
     MaterialModule,
-    MatSliderModule
+    MatSliderModule,
+    // NgChartsModule
   ],
   exports: [
     MatToolbarModule,

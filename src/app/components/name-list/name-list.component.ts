@@ -16,22 +16,11 @@ export class NameListComponent implements OnInit {
   numberOfPeople = 0;
 
   names: string[] = ['', '', '', ''];
+  namesWithInput: string[] = [];
+  graph: any;
+  x: any;
+  y: any;
 
-  // numberPerTeam = 1;
-  // teamSplitOptions: any = {
-  //   4: [
-  //     {
-  //       numPerTeam: 2,
-  //       remainder: 0
-  //     }
-  //   ],
-  //   5: [
-  //     {
-  //       numPerTeam: 2,
-  //       remainder: 0
-  //     }
-  //   ]
-  // }
   ngOnInit(): void {
   }
 
@@ -48,29 +37,29 @@ export class NameListComponent implements OnInit {
   }
 
   updateOptions() {
-    let names: string[] = [];
+    this.namesWithInput = [];
     this.names.forEach(name => {
-      if(name !== '') {
-        names.push(name);
+      if (name !== '') {
+        this.namesWithInput.push(name);
       }
     });
-    if(names.length >= 2) {
-      this.generateTeamsOptions(names, names.length); 
+    if (this.namesWithInput.length >= 2) {
+      this.generateTeamsOptions(this.namesWithInput, this.namesWithInput.length);
     }
   }
 
   changeNumberOfTeams(increment: boolean) {
     let numberOfTeamsOriginal = this.numberOfTeams;
-    if(this.numberOfPeople === 0) {
+    if (this.numberOfPeople === 0) {
       return;
     }
-    if(increment) {
+    if (increment) {
       this.numberOfTeams = (this.numberOfTeams < this.numberOfPeople) ? this.numberOfTeams + 1 : this.numberOfPeople;
     } else {
       this.numberOfTeams = (this.numberOfTeams > 1) ? this.numberOfTeams - 1 : 1;
     }
 
-    if(numberOfTeamsOriginal !== this.numberOfTeams) {
+    if (numberOfTeamsOriginal !== this.numberOfTeams) {
       this.updateNumberOfTeams();
     }
   }
@@ -87,18 +76,18 @@ export class NameListComponent implements OnInit {
     let remainder = numberOfPeople % numberOfTeams;
     console.log('divide: ', divide);
     console.log('remainder: ', remainder);
-    for(let i = 0; i < numberOfTeams; i++) {
+    for (let i = 0; i < numberOfTeams; i++) {
       this.tilesPersonCounts.push(1);
     }
     // this.tilesPersonCounts.forEach(tilesPersonCount => {
     //   tilesPersonCount = divide;
     // });
-    for(let i = 0; i < this.tilesPersonCounts.length; i++) {
+    for (let i = 0; i < this.tilesPersonCounts.length; i++) {
       this.tilesPersonCounts[i] = divide;
     }
 
-    for(let i = 0; i < remainder; i++) {
-      this.tilesPersonCounts[i] ++ ;
+    for (let i = 0; i < remainder; i++) {
+      this.tilesPersonCounts[i]++;
     }
     console.log('this.tilesPersonCounts: ', this.tilesPersonCounts);
   }
@@ -108,7 +97,7 @@ export class NameListComponent implements OnInit {
     console.log('length: ', length);
     this.tilesPersonCounts = [];
     this.numberOfPeople = length;
-    for(let i = 0; i< length; i++) {
+    for (let i = 0; i < length; i++) {
       this.tilesPersonCounts.push(1);
     }
   }
@@ -121,9 +110,9 @@ export class NameListComponent implements OnInit {
     console.log('shuffle: ', shuffledNames);
     let index = 0;
     this.tilesPersonCounts.forEach(tilesPersonCount => {
-      for(let i = 0; i< tilesPersonCount; i++) {
+      for (let i = 0; i < tilesPersonCount; i++) {
         generatedTeam.push(shuffledNames[index]);
-        index ++;
+        index++;
       }
       generatedTeams.push(generatedTeam);
       generatedTeam = [];
@@ -149,21 +138,62 @@ export class NameListComponent implements OnInit {
   }
 
   shuffleNames(array: string[]) {
-    let currentIndex = array.length,  randomIndex;
-  
+    let currentIndex = array.length, randomIndex;
+
     // While there remain elements to shuffle.
     while (currentIndex != 0) {
-  
+
       // Pick a remaining element.
       randomIndex = Math.floor(Math.random() * currentIndex);
       currentIndex--;
-  
+
       // And swap it with the current element.
       [array[currentIndex], array[randomIndex]] = [
         array[randomIndex], array[currentIndex]];
     }
-  
+
     return array;
+  }
+
+  generateChart() {
+    let x: any = [];
+    let y: any = [];
+    let index = 1;
+    let shuffledNames = this.shuffleNames(this.names.slice());
+    shuffledNames.forEach(name => {
+      x.push(name);
+      y.push(index);
+      index++;
+    });
+
+    this.x = x;
+    this.y = y;
+
+    this.setGraph();
+  }
+
+  setGraph() {
+    this.graph = {
+      data: [
+        {
+          x: this.x,
+          y: this.y,
+          text: this.x,
+          hoverinfo: 'skip',
+          textposition: 'inside',
+          type: 'bar',
+        },
+      ],
+      layout: {
+        xaxis: { visible: true, showticklabels: false, fixedrange: true },
+        yaxis: { visible: true, showticklabels: false, fixedrange: true },
+        autosize: false,
+        width: 300,
+      },
+      config: {
+        displayModeBar: false, // this is the line that hides the bar.
+      }
+    };
   }
 
 }

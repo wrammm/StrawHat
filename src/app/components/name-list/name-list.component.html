@@ -14,39 +14,55 @@
     </button>
   </div>
 </mat-card>
+<div *ngIf="!(namesWithInput && namesWithInput.length > 1)">
+  <mat-card style="margin: 16px">
+    <span style="color: red">Please enter a minimum of two names.</span>
+  </mat-card>
+</div>
 
-<mat-card style="margin: 16px">
+<mat-card style="margin: 16px" *ngIf="namesWithInput && namesWithInput.length > 1">
   <mat-tab-group>
     <mat-tab label="Split into teams">
       <div style="margin-top:16px">
-        <mat-form-field appearance="fill" floatLabel="always" >
+        <mat-form-field appearance="fill" floatLabel="always">
           <mat-label>Number of teams</mat-label>
-              <input matInput type="number" class="example-right-align" [(ngModel)]="numberOfTeams">
-              <div matSuffix class="wrapper-indicator">
-                <button class="up" mat-icon-button (click)="changeNumberOfTeams(true)">
-                  <mat-icon>expand_less</mat-icon>
-                </button>
-                <button class="down" mat-icon-button (click)="changeNumberOfTeams(false)">
-                  <mat-icon>expand_more</mat-icon>
-                </button>
-              </div>
+          <input matInput type="number" class="example-right-align" [(ngModel)]="numberOfTeams">
+          <div matSuffix class="wrapper-indicator">
+            <button class="up" mat-icon-button (click)="changeNumberOfTeams(true)">
+              <mat-icon>expand_less</mat-icon>
+            </button>
+            <button class="down" mat-icon-button (click)="changeNumberOfTeams(false)">
+              <mat-icon>expand_more</mat-icon>
+            </button>
+          </div>
         </mat-form-field>
       </div>
-      <mat-grid-list cols="2" rowHeight="100px">
-        <mat-grid-tile *ngFor="let tilesPersonCount of tilesPersonCounts; index as i; trackBy:trackByFn">
-          <div>
-            <div style="text-align: center"><i *ngFor="let _ of [].constructor(tilesPersonCount)" class="material-icons">person</i></div>
-            <div>Team {{i + 1}}</div>
-          </div>
-        </mat-grid-tile>
-      </mat-grid-list>
+      <div *ngIf="namesWithInput && namesWithInput.length > 1">
+        <mat-grid-list cols="2" rowHeight="100px">
+          <mat-grid-tile *ngFor="let tilesPersonCount of tilesPersonCounts; index as i; trackBy:trackByFn">
+            <div>
+              <div style="text-align: center"><i *ngFor="let _ of [].constructor(tilesPersonCount)"
+                  class="material-icons">person</i></div>
+              <div>Team {{i + 1}}</div>
+            </div>
+          </mat-grid-tile>
+        </mat-grid-list>
+      </div>
+      <div style="text-align: center;">
+        <button mat-button class="submitBtn"
+          (click)="generateTeams()">
+          Generate teams
+        </button>
+      </div>
     </mat-tab>
-    <mat-tab label="Draw straws"> Pick order </mat-tab>
+    <mat-tab label="Draw straws">
+      <div>
+        <plotly-plot *ngIf="graph" [data]="graph.data" [layout]="graph.layout" [config]="graph.config"></plotly-plot>
+      </div>
+      <div style="margin-top: 16px; text-align: center;">
+        <button mat-button class="submitBtn"
+          (click)="generateChart()">Draw straws</button>
+      </div>
+    </mat-tab>
   </mat-tab-group>
 </mat-card>
-
-<div style="text-align: center;">
-  <button mat-button style="background-color: white; margin: 16px 16px 32px 16px; width: 300px" color="primary" (click)="generateTeams()">
-    Generate teams
-  </button>
-</div>
