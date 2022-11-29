@@ -29,7 +29,8 @@ export class NameListComponent implements OnInit {
   }
 
   removeName(index: number) {
-    this.names.splice(index, 1)
+    this.names.splice(index, 1);
+    this.updateOptions();
   }
 
   trackByFn(index: any, item: any) {
@@ -48,15 +49,30 @@ export class NameListComponent implements OnInit {
     }
   }
 
-  changeNumberOfTeams(increment: boolean) {
+  changeNumberOfTeams(increment: boolean, event ?: any) {
+    console.log('event1: ', event);
     let numberOfTeamsOriginal = this.numberOfTeams;
-    if (this.numberOfPeople === 0) {
+    if (this.numberOfPeople === 0 && event === undefined) {
+      return;
+    } 
+    if (event === null) {
       return;
     }
-    if (increment) {
-      this.numberOfTeams = (this.numberOfTeams < this.numberOfPeople) ? this.numberOfTeams + 1 : this.numberOfPeople;
+    console.log('event: ', event);
+    if(event === undefined){ 
+      if (increment) {
+        this.numberOfTeams = (this.numberOfTeams < this.numberOfPeople) ? this.numberOfTeams + 1 : this.numberOfPeople;
+      } else {
+        this.numberOfTeams = (this.numberOfTeams > 1) ? this.numberOfTeams - 1 : 1;
+      }
     } else {
-      this.numberOfTeams = (this.numberOfTeams > 1) ? this.numberOfTeams - 1 : 1;
+      console.log('else this.numberOfTeams: ', event);
+      if(this.numberOfTeams < 1) {
+        this.numberOfTeams = 1;
+      } else if(this.numberOfTeams > this.numberOfPeople) {
+        this.numberOfTeams = this.numberOfPeople;
+      }
+      this.updateNumberOfTeams();
     }
 
     if (numberOfTeamsOriginal !== this.numberOfTeams) {
@@ -66,16 +82,16 @@ export class NameListComponent implements OnInit {
 
   updateNumberOfTeams() {
     this.tilesPersonCounts = [];
-    console.log('updateNumberOfTeams: ', this.numberOfTeams); //2
-    console.log('this.numberOfPeople: ', this.numberOfPeople); //4
+    // console.log('updateNumberOfTeams: ', this.numberOfTeams); //2
+    // console.log('this.numberOfPeople: ', this.numberOfPeople); //4
 
     let numberOfPeople = this.numberOfPeople;
     let numberOfTeams = this.numberOfTeams;
 
     let divide = Math.floor(numberOfPeople / numberOfTeams);
     let remainder = numberOfPeople % numberOfTeams;
-    console.log('divide: ', divide);
-    console.log('remainder: ', remainder);
+    // console.log('divide: ', divide);
+    // console.log('remainder: ', remainder);
     for (let i = 0; i < numberOfTeams; i++) {
       this.tilesPersonCounts.push(1);
     }
@@ -89,12 +105,12 @@ export class NameListComponent implements OnInit {
     for (let i = 0; i < remainder; i++) {
       this.tilesPersonCounts[i]++;
     }
-    console.log('this.tilesPersonCounts: ', this.tilesPersonCounts);
+    // console.log('this.tilesPersonCounts: ', this.tilesPersonCounts);
   }
 
   generateTeamsOptions(names: string[], length: number) {
-    console.log('names: ', names);
-    console.log('length: ', length);
+    // console.log('names: ', names);
+    // console.log('length: ', length);
     this.tilesPersonCounts = [];
     this.numberOfPeople = length;
     for (let i = 0; i < length; i++) {
@@ -105,9 +121,9 @@ export class NameListComponent implements OnInit {
   generateTeams() {
     let generatedTeams: any = [];
     let generatedTeam: any = [];
-    console.log('this.names: ', this.names);
-    let shuffledNames = this.shuffleNames(this.names.slice());
-    console.log('shuffle: ', shuffledNames);
+    // console.log('this.names: ', this.names);
+    let shuffledNames = this.shuffleNames(this.namesWithInput.slice());
+    // console.log('shuffle: ', shuffledNames);
     let index = 0;
     this.tilesPersonCounts.forEach(tilesPersonCount => {
       for (let i = 0; i < tilesPersonCount; i++) {
@@ -117,7 +133,7 @@ export class NameListComponent implements OnInit {
       generatedTeams.push(generatedTeam);
       generatedTeam = [];
     });
-    console.log('generatedTeams: ', generatedTeams);
+    // console.log('generatedTeams: ', generatedTeams);
     this.openResultsDialog(generatedTeams);
   }
 
@@ -159,20 +175,22 @@ export class NameListComponent implements OnInit {
     let x: any = [];
     let y: any = [];
     let index = 1;
-    let shuffledNames = this.shuffleNames(this.names.slice());
+    let shuffledNames = this.shuffleNames(this.namesWithInput.slice());
+    let chartWidth = 150;
     shuffledNames.forEach(name => {
       x.push(name);
       y.push(index);
+      chartWidth += 50;
       index++;
     });
 
     this.x = x;
     this.y = y;
 
-    this.setGraph();
+    this.setGraph(chartWidth);
   }
 
-  setGraph() {
+  setGraph(chartWidth: number) {
     this.graph = {
       data: [
         {
@@ -182,13 +200,22 @@ export class NameListComponent implements OnInit {
           hoverinfo: 'skip',
           textposition: 'inside',
           type: 'bar',
+          labels: {x: 'Year', y:'Dollars USD'}
         },
       ],
       layout: {
-        xaxis: { visible: true, showticklabels: false, fixedrange: true },
-        yaxis: { visible: true, showticklabels: false, fixedrange: true },
+        xaxis: { visible: true, showticklabels: false, fixedrange: true,  
+          title: {
+            text: 'Selected straws'
+          }
+        },
+        yaxis: { visible: true, showticklabels: false, fixedrange: true,  
+          title: {
+            text: 'Straw length'
+          }
+        },
         autosize: false,
-        width: 300,
+        width: chartWidth,
       },
       config: {
         displayModeBar: false, // this is the line that hides the bar.

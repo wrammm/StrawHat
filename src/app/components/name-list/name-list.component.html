@@ -26,7 +26,7 @@
       <div style="margin-top:16px">
         <mat-form-field appearance="fill" floatLabel="always">
           <mat-label>Number of teams</mat-label>
-          <input matInput type="number" class="example-right-align" [(ngModel)]="numberOfTeams">
+          <input matInput type="number" class="example-right-align" [(ngModel)]="numberOfTeams" (ngModelChange)="changeNumberOfTeams(false, $event)">
           <div matSuffix class="wrapper-indicator">
             <button class="up" mat-icon-button (click)="changeNumberOfTeams(true)">
               <mat-icon>expand_less</mat-icon>
