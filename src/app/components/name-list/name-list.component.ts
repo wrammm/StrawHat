@@ -195,6 +195,7 @@ export class NameListComponent implements OnInit {
 
   generateMappings() {
     this.mappings = [];
+    let mappings: SecretSantaPair[] = [];
     let mapping: SecretSantaPair;
     let shuffledNames = this.shuffleNames(this.namesWithInput.slice());
     for(let i = 0; i < shuffledNames.length; i++) {
@@ -211,8 +212,17 @@ export class NameListComponent implements OnInit {
           revealed: false
         }
       }
-      this.mappings.push(mapping);
+      mappings.push(mapping);
     }
+
+    // make original name order
+    this.namesWithInput.forEach(name => {
+      mappings.forEach(mapping => {
+        if(mapping.giver === name) {
+          this.mappings?.push(mapping);
+        }
+      });
+    });
   }
 
   revealSecretSantaResult(mapping?: SecretSantaPair): void {
