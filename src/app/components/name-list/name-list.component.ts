@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { SecretSantaPair } from 'src/app/interfaces/secretSantaPair';
+import { SecretSantaResultsComponent } from '../secret-santa-results/secret-santa-results.component';
 import { TeamResultsDialogComponent } from '../team-results-dialog/team-results-dialog.component';
 
 @Component({
@@ -20,6 +22,7 @@ export class NameListComponent implements OnInit {
   graph: any;
   x: any;
   y: any;
+  mappings: undefined | SecretSantaPair[] = undefined;
 
   ngOnInit(): void {
   }
@@ -188,6 +191,43 @@ export class NameListComponent implements OnInit {
     this.y = y;
 
     this.setGraph(chartWidth);
+  }
+
+  generateMappings() {
+    this.mappings = [];
+    let mapping: SecretSantaPair;
+    let shuffledNames = this.shuffleNames(this.namesWithInput.slice());
+    for(let i = 0; i < shuffledNames.length; i++) {
+      if(i < shuffledNames.length - 1) {
+        mapping = {
+          giver: shuffledNames[i],
+          reciever: shuffledNames[i + 1],
+          revealed: false
+        }
+      } else {
+        mapping = {
+          giver: shuffledNames[i],
+          reciever: shuffledNames[0],
+          revealed: false
+        }
+      }
+      this.mappings.push(mapping);
+    }
+  }
+
+  revealSecretSantaResult(mapping?: SecretSantaPair): void {
+    const dialogRef = this.dialog.open(SecretSantaResultsComponent, {
+      data: {mapping: mapping, mappings: this.mappings}
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if(mapping) {
+        mapping.revealed = true;
+      } else {
+        this.mappings!.forEach(mapping => {
+          mapping.revealed = true;
+        });
+      }
+    });
   }
 
   setGraph(chartWidth: number) {

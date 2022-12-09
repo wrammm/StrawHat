@@ -22,6 +22,34 @@
     top:1rem;
   }
 
+  .mat-mdc-list-item-icon {
+    color: rgba(0, 0, 0, 0.54);
+  }
+  mat-list-item { 
+    margin: 16px;
+  }
+  button[mat-icon-button]{
+    $large-size-button: 80px;
+    $large-size-icon: 48px;
+    
+        &.icon-button-large {
+          width: $large-size-button;
+          height: $large-size-button;
+          line-height: $large-size-button;
+        .mat-icon {
+          font-size: $large-size-icon;
+          width: $large-size-icon;
+          height: $large-size-icon;
+          line-height: $large-size-icon;
+        }
+        .mat-button-ripple {
+          font-size: inherit;
+          width: inherit;
+          height: inherit;
+          line-height: inherit;
+        }
+      }
+    }
 
   // hide number input arrows
   /* Chrome, Safari, Edge, Opera */

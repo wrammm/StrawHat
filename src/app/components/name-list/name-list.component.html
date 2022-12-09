@@ -26,7 +26,8 @@
       <div style="margin-top:16px">
         <mat-form-field appearance="fill" floatLabel="always">
           <mat-label>Number of teams</mat-label>
-          <input matInput type="number" class="example-right-align" [(ngModel)]="numberOfTeams" (ngModelChange)="changeNumberOfTeams(false, $event)">
+          <input matInput type="number" class="example-right-align" [(ngModel)]="numberOfTeams"
+            (ngModelChange)="changeNumberOfTeams(false, $event)">
           <div matSuffix class="wrapper-indicator">
             <button class="up" mat-icon-button (click)="changeNumberOfTeams(true)">
               <mat-icon>expand_less</mat-icon>
@@ -49,10 +50,40 @@
         </mat-grid-list>
       </div>
       <div style="text-align: center;">
-        <button mat-button class="submitBtn"
-          (click)="generateTeams()">
+        <button mat-button class="submitBtn" (click)="generateTeams()">
           Generate teams
         </button>
+      </div>
+    </mat-tab>
+    <mat-tab label="Secret Santa">
+      <div *ngIf="mappings">
+        <mat-list *ngIf="mappings">
+          <div style="margin: 16px 16px 24px 16px; font-size: large;">Click gift by your name to reveal who you will
+            give a gift to.</div>
+          <mat-list-item *ngFor="let mapping of mappings; index as v; trackBy:trackByFn">
+            <div style="width: 100px" *ngIf="!mapping.revealed">
+              <mat-icon style="color: dodgerblue"><span style="font-size: 50px;"
+                  (click)="revealSecretSantaResult(mapping)">card_giftcard</span></mat-icon>
+            </div>
+            <div style="width: 100px" *ngIf="mapping.revealed">
+              <mat-icon style="color: green"><span style="font-size: 50px;"
+                  (click)="revealSecretSantaResult(mapping)">check_circle</span></mat-icon>
+            </div>
+            <div><span style="font-size: large;">{{mapping.giver}}</span></div>
+          </mat-list-item>
+        </mat-list>
+      </div>
+      <div style="margin-top: 24px; text-align: center;">
+        <div *ngIf="!mappings">
+          <button style="margin: 8px" mat-button class="submitBtn" (click)="generateMappings()">Generate Secret
+            Santa</button>
+        </div>
+        <div *ngIf="mappings">
+          <button style="margin: 8px" mat-button class="submitBtn" (click)="generateMappings()">Re-generate Secret
+            Santa</button>
+          <button style="margin: 8px" mat-button class="submitBtn" (click)="revealSecretSantaResult()">Reveal all Secret
+            Santas</button>
+        </div>
       </div>
     </mat-tab>
     <mat-tab label="Draw straws">
@@ -60,8 +91,7 @@
         <plotly-plot *ngIf="graph" [data]="graph.data" [layout]="graph.layout" [config]="graph.config"></plotly-plot>
       </div>
       <div style="margin-top: 16px; text-align: center;">
-        <button mat-button class="submitBtn"
-          (click)="generateChart()">Draw straws</button>
+        <button mat-button class="submitBtn" (click)="generateChart()">Draw straws</button>
       </div>
     </mat-tab>
   </mat-tab-group>

@@ -19,6 +19,7 @@ import { TeamResultsDialogComponent } from './components/team-results-dialog/tea
 // import { NgChartsModule } from 'ng2-charts';
 import * as PlotlyJS from 'plotly.js-dist-min';
 import { PlotlyModule } from 'angular-plotly.js';
+import { SecretSantaResultsComponent } from './components/secret-santa-results/secret-santa-results.component';
 
 PlotlyModule.plotlyjs = PlotlyJS;
 
@@ -26,7 +27,8 @@ PlotlyModule.plotlyjs = PlotlyJS;
   declarations: [
     AppComponent,
     NameListComponent,
-    TeamResultsDialogComponent
+    TeamResultsDialogComponent,
+    SecretSantaResultsComponent
   ],
   imports: [
     PlotlyModule,
